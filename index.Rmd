@@ -13,13 +13,14 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Carga de paquetes
 
-```{r Carga de paquetes}
 
+```{r}
 library (ggplot2)
 library (plotly)
 library (dplyr)
 library (graphics)
 ```
+
 
 ## Carga de datos
 
@@ -69,7 +70,7 @@ ggplot () + geom_col (
   ggtitle ("Caudal mensual (m3/s)  de los Ríos Pandora y Banano, Limón, Costa Rica") +
   xlab ("Mes") +
   ylab ("Caudal (m3/s)") +
-  scale_fill_manual (values = c("#97FFFF", "#4169E1")) +
+  scale_fill_manual (values = c("#104E8B", "#4876FF")) +
   theme (
     legend.title = element_blank(), legend.position = "left", plot.title = element_text (size = 12))
 ```
