@@ -74,4 +74,83 @@ ggplot () + geom_col (
     legend.title = element_blank(), legend.position = "left", plot.title = element_text (size = 12))
 ```
 
+## 2.  Histograma que muestre la distribución de los casos nuevos de covid en Costa Rica. Elija cuidadosamente el tamaño de los “bins”
+
+## Carga de datos 
+
+```{r}
+covid <- 
+  read.csv(
+    file='https://raw.githubusercontent.com/tpb728O-programaciongeoespacialr/2021ii/main/datos/minsalud/covid/ultimafecha_CSV_GENERAL.csv', 
+    sep = ","
+  )
+
+```
+
+
+
+## Conversion de las variables 
+
+```{r}
+covid1 <-
+  covid %>%
+  select (FECHA, nue_posi) %>%
+  rename(fecha = FECHA) %>%
+  mutate (fecha = as.Date(fecha, format = "%d/%m/%Y"))
+
+```
+
+## Histograma 
+
+```{r}
+ggplot (covid1, aes (x = fecha, y = nue_posi)) + geom_histogram(binwidth = 0.08, stat= 'identity', fill = "white", color= "red" )+
+ggtitle("Distribución de los casos nuevos de Covid-19, Costa Rica (2020-2021)") +
+  xlab("Fecha")+
+  ylab("Total de casos nuevos") + 
+  theme(plot.title = element_text(size = 14))
+```
+
+## 3. Gráfico de barras agrupadas que muestre la cantidad de hombres y mujeres fallecidos por covid en Costa Rica por cada uno de los 12 meses del año.
+```{r}
+covid2 <-
+  covid %>%
+  select (FECHA, muj_fall, hom_fall) %>%
+  rename(fecha = FECHA) %>%
+  mutate (fecha = as.Date(fecha, format = "%d/%m/%Y")) %>%
+  group_by(mes = format(fecha, "%m")) %>%
+  summarise(sum_hom = sum(hom_fall),sum_muj = sum(muj_fall))
+
+covid2
+```
+
+## Graficación
+
+```{r}
+ggplot() +
+  geom_col(
+    data = covid2,
+    aes(x = mes, y = sum_muj, fill = "Mujeres"),
+    width = 0.3,
+    position = position_nudge(x = -0.15)
+  ) +
+  
+  geom_col(
+    data = covid2,
+    aes(x = mes, y = sum_hom, fill = "Hombres"),
+    width = 0.3,
+    position = position_nudge(x = 0.15)
+  ) +
+  scale_fill_manual(values = c("#7FFFD4", "#458B00")) +
+  ggtitle( "Cantidad de mujeres y hombres fallecidos por Covid-19 en Costa Rica en 2020-2021") +
+  xlab("Mes") +
+  ylab("Cantidad de Fallecidos") +
+  theme(
+    legend.title = element_blank(),
+    legend.position = "left",
+    plot.title = element_text(size = 13, face = "bold")
+  )
+
+```
+
+
 
