@@ -1,0 +1,77 @@
+---
+title: "Tarea 02 - Graficación y Tidyverse"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Maureen Arguedas
+
+# Trabajo previo 
+
+Carga de paquetes
+
+```{r Carga de paquetes}
+
+library (ggplot2)
+library (plotly)
+library (dplyr)
+library (graphics)
+```
+
+## Carga de datos
+
+```{r pressure, echo=FALSE}
+
+rios <-
+  read.csv(file = 'https://raw.githubusercontent.com/tpb728O-programaciongeoespacialr/2021ii/main/datos/hidrologia/fdc/fdc.csv')
+```
+
+
+## 1. Gráfico de barras apiladas que muestre el caudal de los ríos Pandora y Bananito por cada uno de los 12 meses del año
+
+## Conversión de variables 
+
+```{r}
+rios <-
+  rios %>%
+  rename(fecha = Tiempo,
+         pandora = Pandora.mm..637km2.,
+         banano = Banano.mm..90km2.) %>%
+  mutate (fecha = as.Date(fecha, format = "%m/%d/%Y"))
+```
+
+## Manipulación de datos
+
+```{r}
+rios_x_mes <-
+  rios %>%
+  select (fecha, pandora, banano) %>%
+  mutate (fecha = as.Date(fecha, format = "%d/%m/%Y")) %>%
+  group_by( mes = format(fecha, "%m")) %>%
+  summarise(caudal_pandora = sum (pandora), caudal_banano= sum (banano))
+
+rios_x_mes
+```
+
+## Graficación
+
+```{r}
+ggplot () + geom_col (
+  data = rios_x_mes, 
+  aes (x = mes,
+      y = caudal_banano,  fill = "Río Banano"), width = 0.5) +
+  geom_col (
+      data = rios_x_mes,
+      aes (x = mes, y = caudal_pandora, fill = "Río Pandora"), width = 0.5)  + 
+  ggtitle ("Caudal mensual (m3/s)  de los Ríos Pandora y Banano, Limón, Costa Rica") +
+  xlab ("Mes") +
+  ylab ("Caudal (m3/s)") +
+  scale_fill_manual (values = c("#97FFFF", "#4169E1")) +
+  theme (
+    legend.title = element_blank(), legend.position = "left", plot.title = element_text (size = 12))
+```
+
+
