@@ -141,13 +141,13 @@ ggplot() +
     position = position_nudge(x = 0.15)
   ) +
   scale_fill_manual(values = c("#7FFFD4", "#458B00")) +
-  ggtitle( "Cantidad de mujeres y hombres fallecidos por Covid-19 en Costa Rica en 2020-2021") +
+  ggtitle( "Cantidad de mujeres y hombres fallecidos por Covid-19 en Costa Rica") +
   xlab("Mes") +
   ylab("Cantidad de Fallecidos") +
   theme(
     legend.title = element_blank(),
     legend.position = "left",
-    plot.title = element_text(size = 13, face = "bold")
+    plot.title = element_text(size = 11, face = "bold")
   )
 
 ```
